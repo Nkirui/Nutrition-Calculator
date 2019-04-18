@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+    <record id= "forestfacts_product_template_tree_view" model="ir.ui.view">
+    <field name="inherit_id" ref= "product.product_template_tree_view"/>
+    <field name= "model">product.template</field>
+    <field name= "arch" type="xml">
+        <field name= "categ_id" position= "after">
+            <field name= "calories"/>  
+            <field name= "serving_size"/>
+            <field name= "date_modified"/>
+            <field name= "nutrients_score"/>
+        </field>
+    </field> 
+    </record>
+
+    <record id= "forestfacts_product_template_form_view" model="ir.ui.view">
+    <field name="inherit_id" ref= "product.product_template_only_form_view"/>
+    <field name= "model">product.template</field>
+    <field name= "arch" type="xml">
+        <field name= "list_price" position= "after">
+            <field name= "calories"/>
+            <field name= "serving_size"/>
+            <field name= "date_modified"/>
+            <field name= "nutrients_score"/>
+
+        </field>
+        <page name="sales" position="after">
+            <page name="nutrients" string="Nutrients">
+                <field name="nutrients_ids" widget="one2many_list">
+                <tree editable="bottom">
+                    <field name="nutrients_id"/>
+                    <field name="value"/>
+                    <field name="dailypercent"/>
+                    <field name="uom"/>
+                </tree>
+                </field>
+            </page>
+        </page>
+    </field>
+    </record>
+
+    <record id="product.product_template_action_forestfacts" model="ir.actions.act_window">
+
+        <field name="name">Diet Items</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="product.product_template_tree_view"/>
+        <field name="context">{"search_default_filter_to_sell":1}</field>
+        <field name="domain">[('categ_id.name','=','Diet Items')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to define a new product.
+            </p><p>
+                You must define a product for everything you sell, whether it's a physical product, a consumable or a service you offer to customers.
+            </p><p>
+                The product form contains information to simplify the sale process: price, notes in the quotation, accounting data, procurement methods, etc.
+            </p>
+        </field>
+    </record>
+
+    <record id="meal_action_forestfacts" model="ir.actions.act_window">
+        <field name="name">Meals</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.users.meal</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to define a new meal.
+            </p>
+        </field>
+   </record>
+
+    <record id= "forestfacts_meal_form_view" model="ir.ui.view">
+    <field name= "model">res.users.meal</field>
+    <field name="view_type">form</field>
+    <field name= "arch" type="xml">
+        <form>
+            <group>
+                <field name= "name"/>
+                <field name= "user_id"/>
+                <field name= "meal_date"/>
+                <field name= "totalcalories"/>
+                <field name= "largemeal"/>
+                <field name= "notes"/>
+
+            </group>
+            <notebook>
+                <page name="mealitems" string="Meal Items">
+                    <field name="item_ids" widget="one2many_lists">
+                        <tree string="Menu Items" editable="bottom">
+                            <field name= "item_id"/>
+                            <field name= "calories"/>
+                            <field name= "servings"/>
+                            <field name= "notes"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </form>
+    </field>
+    </record>
+
+    <record id= "forestfacts_meal_tree_view" model="ir.ui.view">
+    <field name= "model">res.users.meal</field>
+    <field name= "arch" type="xml">
+        <tree>
+            <field name= "name"/>
+            <field name= "meal_date"/>
+            <field name= "user_id"/>
+            <field name= "totalcalories" sum="totalcalories"/>
+        </tree>
+    </field>
+    </record>
+
+    <menuitem action="product.product_template_action_forestfacts"
+        id="menu_product_template_action_forestfacts"
+        parent="sale.product_menu_catalog"
+        sequence="14"
+        active="True"/>
+
+    <menuitem action="meal_action_forestfacts"
+        id="menu_meal_action_forestfacts"
+        parent="sale.product_menu_catalog"
+        sequence="15"
+        active="True"/>
+
+    <record id="nutrients_action_forestfacts" model="ir.actions.act_window">
+        <field name="name">Nutrients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.nutrients</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to define a new Nutrients.
+            </p>
+        </field>
+   </record>
+
+    <menuitem action="nutrients_action_forestfacts"
+        id="nutrients_meal_action_forestfacts"
+        parent="sale.product_menu_catalog"
+        sequence="16"
+        active="True"/>
+
+    </data>
+</odoo>
