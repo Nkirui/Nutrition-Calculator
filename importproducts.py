@@ -1,10 +1,12 @@
 from xmlrpc import client
 import csv
+import credentials
 
-server = "http://localhost:8069"
-database ="mydiet"
-user = "nathankirui5@gmail.com"
-pwd = "monkey567"
+server = credentials.configs['URL']
+database = credentials.configs['DB']
+user = credentials.configs['USER']
+pwd = credentials.configs['PWD']
+
 common = client.ServerProxy(f'{server}/xmlrpc/2/common')
 
 uid = common.authenticate(database,user,pwd,{})
@@ -32,7 +34,6 @@ try:
             print(f'Adding Product : {productname}')
             record = [{'name':productname,'calories':calories,'type':type.lower(),'categ_id':categ_id[0]}]
             odooApi.execute_kw(database, uid, pwd, 'product.template', 'create',record)
-
 except:
     pass
 
